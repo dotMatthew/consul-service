@@ -13,4 +13,4 @@ spec:
     spec:
       containers:
         - name: test
-          image: consul-service:latest
+          image: ghcr.io/dotmatthew/consul-service:latest
