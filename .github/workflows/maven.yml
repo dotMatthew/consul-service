@@ -1,5 +1,8 @@
 name: maven-ci
 on: [ push, pull_request]
+permissions:
+  contents: read
+  packages: write
 jobs:
   build:
     runs-on: ubuntu-latest
