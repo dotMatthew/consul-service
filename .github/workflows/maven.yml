@@ -1,0 +1,28 @@
+name: maven-ci
+on: [ push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout git project
+        uses: actions/checkout@v3
+      - name: Setup jdk 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+      - name: Build with maven
+        run: mvn -B clean package -DskipTests
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout git project
+        uses: actions/checkout@v3
+      - name: Setup jdk 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+      - name: Deploy with maven
+        run: mvn -B deploy -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

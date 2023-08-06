@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    consul:
+      host: consul-client.consul.svc.cluster.local
+      port: 8500
+      discovery:
+        hostname: "test"
+        instance-id: "test"-${random.uuid}
+        fail-fast: true
