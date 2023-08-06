@@ -1,16 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: consul-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # This name will be the service name in Consul.
+  name: consul-service
+  namespace: consul-service
+spec:
+  selector:
+    app: consul-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: consul-service
+  namespace: consul-service
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-deployment
+  name: consul-service-deployment
+  namespace: consul-service
 spec:
   selector:
     matchLabels:
-      app: test
+      app: consul-service
   template:
     metadata:
-        labels:
-            app: test
+      labels:
+        app: consul-service
+      namespace: consul-service
+      annotations:
+        'consul.hashicorp.com/service-name': 'consul-service'
+        'consul.hashicorp.com/service-port': '8080'
+        'consul.hashicorp.com/connect-inject': 'true'
     spec:
       containers:
         - name: test
           image: ghcr.io/dotmatthew/consul-service:latest
+          ports:
+            - containerPort: 8080
+              name: spring-http
+      serviceAccountName: consul-service
+
